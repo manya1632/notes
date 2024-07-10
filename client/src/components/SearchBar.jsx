@@ -13,9 +13,9 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
         className='w-full text-sm bg-transparent py-[11px] outline-none'
       />
       {value && (
-        <IoMdClose size={22} className='text-xl text-slate-500 cursor-pointer hover:text-black mr-3' onClick={onClearSearch} />
+        <IoMdClose size={20} className='text-xl text-slate-500 cursor-pointer hover:text-black mr-3' onClick={onClearSearch} />
       )}
-      <FaSearch size={22} className="text-slate-400 cursor-pointer hover:text-black" onClick={handleSearch} />
+      <FaSearch size={20} className="text-slate-400 cursor-pointer hover:text-black" onClick={handleSearch} />
     </div>
   );
 };
