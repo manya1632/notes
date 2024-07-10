@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import NavBar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../utils/Helper';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { validatePassword } from '../utils/PasswordHelp';
+import axiosInstance from '../utils/axiosInstance';
 
 const Signup = () => {
-
+  const navigate= useNavigate();
   const[isShowPassword,setIsShowPassword] = useState(0);
     
     const toggleShowPassword = () => {
@@ -43,6 +44,30 @@ const Signup = () => {
 
     setError(null);
 
+    //Register API Handling
+    try {
+      const response = await axiosInstance.post("/api/user/register" ,{
+        name : name, 
+        email : email,
+        password : password
+      });
+
+      if(response.data && response.data.error) {
+        setError(response.data.error) ;
+        return
+      }
+
+      if(response.data && response.data.token) {
+        localStorage.setItem("token", response.data.token)
+        navigate("/");
+      }
+    } catch (error) {
+      if(error.response && error.response.data && error.response.data.msg){
+        setError(error.response.data.msg);
+      } else {
+        setError("An unexpected error has occured. Please try again")
+      }
+    }
 }
 
   return (

@@ -1,21 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import TagInput from './TagInput';
 import { MdClose } from 'react-icons/md';
+import axiosInstance from '../utils/axiosInstance';
 
-const AddEditNotes = ({ noteData, onClose, type }) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState([]);
+const AddEditNotes = ({ noteData, onClose, type, getAllNote ,showToastMessage}) => {
+  const [title, setTitle] = useState(noteData?.title|| "");
+  const [content, setContent] = useState(noteData?.content|| "");
+  const [tags, setTags] = useState(noteData?.tags|| []);
   const [error, setError] = useState(null);
 
 
   const addNewNote = async () => {
-    // Logic to add a new note
+    try {
+      const response = await axiosInstance.post("/api/user-note/create-note", {
+        title ,
+        content, 
+        tags
+      })
+
+      if(response.data && response.data.note) {
+        showToastMessage("Note Added Successfully")
+        getAllNote()
+        onClose()
+      }
+    } catch (error) {
+      if(error.response && error.response.data && error.response.data.msg){
+        setError(error.response.data.msg);
+      }
+    }
   };
 
   const editNote = async () => {
-    // Logic to edit an existing note
+    const noteid = noteData._id;
+    try {
+      const response = await axiosInstance.put("/api/user-note/edit-note/"+noteid, {
+        title ,
+        content, 
+        tags
+      })
+
+      if(response.data && response.data.note) {
+        
+        showToastMessage("Note Updated Successfully")
+        getAllNote()
+        onClose()
+      }
+    } catch (error) {
+      if(error.response && error.response.data && error.response.data.msg){
+        setError(error.response.data.msg);
+      }
+    }
   };
+
+  
 
   const handleOnAddNote = () => {
     if (!title) {
@@ -74,7 +111,7 @@ const AddEditNotes = ({ noteData, onClose, type }) => {
         onClick={handleOnAddNote}
         className="font-medium p-3 w-full text-sm text-white my-1 hover:bg-blue-600 bg-blue-500 rounded"
       >
-        ADD
+        {type==="edit" ? "UPDATE"  : "ADD"}
       </button>
     </div>
   );

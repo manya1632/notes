@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import NavBar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../utils/Helper';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { validatePassword } from '../utils/PasswordHelp';
+import axiosInstance from '../utils/axiosInstance';
 
 const Signin = () => {
+    const navigate = useNavigate();
     const [isShowPassword, setIsShowPassword] = useState(false);
 
     const toggleShowPassword = () => {
@@ -18,24 +20,49 @@ const Signin = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
+    
         if (!validateEmail(email)) {
             setError("Please enter a valid email address");
             return;
         }
-
+    
         if (!password) {
             setError("Please enter the password");
             return;
         }
-
+    
         if (!validatePassword(password)) {
             setError("Please enter a valid password");
             return;
         }
-
+    
         setError(null);
-    }
+    
+        // Sends a POST request to the /login endpoint of the server using axiosInstance
+        try {
+            const response = await axiosInstance.post("/api/user/login", {
+                email: email,
+                password: password,
+            });
+    
+            console.log("Login response:", response);
+    
+            // Checks if token exists in the response data.msg and set token variable in local storage
+            if (response.data && response.data.token) {
+                localStorage.setItem("token", response.data.token);
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+    
+            if (error.response && error.response.data && error.response.data.msg) {
+                setError(error.response.data.msg);
+            } else {
+                setError("An unexpected error has occurred");
+            }
+        }
+    };
+    
 
     return (
         <>
