@@ -1,1 +1,1 @@
-export const BASE_URL ='https://notes-app-phi-azure.vercel.app/'
+export const BASE_URL ="https://notes-app-backend-lxsb.onrender.com"
