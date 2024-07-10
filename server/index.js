@@ -11,12 +11,7 @@ const DB_URL = process.env.DB_URL;
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-    origin: ['https://notes-app-mern-phi.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-}));
+app.use(cors());
 
 app.get("/",(req,res) => { 
     return res.json({
