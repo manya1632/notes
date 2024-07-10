@@ -18,6 +18,11 @@ app.use(cors({
     credentials: true,
 }));
 
+app.get("/",(req,res) => { 
+    return res.json({
+        "msg" : "backend ready"
+    });
+});
 app.use("/api/user", userRouter);
 app.use("/api/user-note",noteRouter);
 
