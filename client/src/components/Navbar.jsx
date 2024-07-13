@@ -25,7 +25,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
   return (
     <div className='fixed top-0 z-10 bg-white w-full h-16 flex items-center justify-between text-black border-b-2 px-4 md:px-8'>
-      <div className='text-stone-800 font-medium'>Notes App</div>
+      <div className='text-stone-800 font-medium'>NoteSync</div>
       {userInfo && (
         <>
           <SearchBar
